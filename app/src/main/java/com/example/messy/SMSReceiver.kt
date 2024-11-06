@@ -4,10 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
-import android.telephony.PhoneNumberUtils
-import android.telephony.SmsMessage
 import android.util.Log
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.messy.Mailer.SendMail
 import com.example.messy.Preferences.Settings
 import com.example.messy.Preferences.TokenManager
@@ -15,30 +12,28 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-const val NEW_DATA_BROADCAST_INTENT = "com.example.messy.NEW_MESSAGE_RECEIVED"
-
 class SMSReceiver: BroadcastReceiver(), CoroutineScope by MainScope() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
-            for (message: SmsMessage in Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
-                val origin = message.originatingAddress.orEmpty()
-                val body = message.messageBody
+            val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+            if (messages.isEmpty()) {
+                // Should never happen
+                Log.i("SMS_RECEIVER", "Received zero-length SMS broadcast ?!")
+                return
+            }
+            Log.d("SMS_RECEIVER", "Received ${messages.size} messages")
+            val origin = messages[0].originatingAddress.orEmpty()
+            var body = ""
 
+            var i = 0
+            do {
+                body += messages[i].messageBody
+            } while (++i < messages.size)
 
-                if (context != null) {
-                    if (!shouldForwardMessage(context, origin)) {
-                        return
-                    }
+            Log.d("SMS_RECEIVER", "Final message origin=$origin, body=$body")
+
+            if (context != null && shouldForwardMessage(context, origin)) {
                     generateAndSendEmail(context, origin, body)
-
-//                    val sendIntent = Intent(NEW_DATA_BROADCAST_INTENT)
-//                    sendIntent.putExtra("ORIGIN", origin)
-//                    sendIntent.putExtra("BODY", body)
-//                    LocalBroadcastManager.getInstance(context).sendBroadcast(sendIntent)
-//                    Log.d("SMS_RECEIVER", "Forwarded ($origin, $body) to interested listeners")
-                } else {
-                    Log.d("SMS_RECEIVER", "No context to pass data along; received SMS from $origin")
-                }
             }
         }
     }
@@ -54,7 +49,7 @@ class SMSReceiver: BroadcastReceiver(), CoroutineScope by MainScope() {
             return
         }
 
-        val mailSender = SendMail(username, appPassword);
+        val mailSender = SendMail(username, appPassword)
         val subject = "Forwarded SMS from $origin"
 
         launch {
