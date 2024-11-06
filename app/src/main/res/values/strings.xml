@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Messy</string>
+    <string name="short_codes_only_switch_label">Only forward SMS from short-codes</string>
+    <string name="source_email_address_label">Source email address (gmail)</string>
+    <string name="source_email_address_hint">blah@gmail.com</string>
+    <string name="source_email_app_password_label">App Password to send email</string>
+    <string name="source_email_app_password_hint">16-character, generate from account settings</string>
+    <string name="destination_email_address_label">Forward messages to</string>
+    <string name="destination_email_address_hint">multiple emails separated by commas</string>
+    <string name="app_settings">Settings</string>
+</resources>
