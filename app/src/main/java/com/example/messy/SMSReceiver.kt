@@ -62,10 +62,17 @@ class SMSReceiver: BroadcastReceiver(), CoroutineScope by MainScope() {
     // Decides whether or not to forward the message, based on whether the
     // origin matches the setting (only short-codes for now)
     private fun shouldForwardMessage(context: Context, origin: String): Boolean {
+        val forwardingEnabled: Boolean = Settings(context).forwardingEnabled
         val shortCodesOnly: Boolean = Settings(context).onlyForwardShortCodes
+
+        if (!forwardingEnabled) {
+            Log.d("FORWARDER", "SMS forwarding stopped")
+            return false
+        }
 
         if (!shortCodesOnly) {
             // Forward all messages
+            Log.d("FORWARDER", "SMS forwarding enabled for all messages")
             return true
         }
 
@@ -74,6 +81,7 @@ class SMSReceiver: BroadcastReceiver(), CoroutineScope by MainScope() {
         val phoneREx = Regex("^\\+?[0-9]{7,}$")
         val matches = phoneREx.matches(origin)
         // Send if the regex for at least a 7-digit number does not match
+        Log.d("FORWARDER", "SMS forwarding for this message = $matches")
         return !matches
     }
 }

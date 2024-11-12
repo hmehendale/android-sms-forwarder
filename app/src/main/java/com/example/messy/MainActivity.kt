@@ -8,10 +8,16 @@ import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.ActionBar
+import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.messy.Preferences.Settings
 import com.example.messy.Preferences.SettingsActivity
@@ -60,11 +66,40 @@ class MainActivity: AppCompatActivity() {
         return true
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val menuItemStopForwarding = menu?.findItem(R.id.action_stop_forwarding)
+        val menuItemStartForwarding = menu?.findItem(R.id.action_start_forwarding)
+
+        val isForwarding = Settings(this).forwardingEnabled
+
+        // Stop forwarding should be visible if `isForwarding`
+        // otherwise we want Start Forwarding to be visible.
+        menuItemStopForwarding?.isVisible = isForwarding
+        menuItemStartForwarding?.isVisible = !isForwarding
+        return super.onPrepareOptionsMenu(menu)
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val settings = Settings(this)
         return when(item.itemId) {
             R.id.action_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
+                return true
+            }
+            R.id.action_start_forwarding -> {
+                // Start forwarding
+                settings.forwardingEnabled = true
+                Toast.makeText(this, "Forwarding is enabled", Toast.LENGTH_LONG).show()
+                updatePreferencesView()
+                this.invalidateOptionsMenu();
+                return true
+            }
+            R.id.action_stop_forwarding -> {
+                // Stop forwarding
+                settings.forwardingEnabled = false
+                Toast.makeText(this, "Forwarding stopped", Toast.LENGTH_LONG).show()
+                this.invalidateOptionsMenu();
+                updatePreferencesView()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -102,10 +137,20 @@ class MainActivity: AppCompatActivity() {
 
     private fun updatePreferencesView() {
         val settings = Settings(this)
+        val bar = supportActionBar
         Log.d("FORWARDER/Main", "Destination Address is ${settings.destEmailAddress}")
 
-        val shortCodeOnlyText = if (settings.onlyForwardShortCodes) "short-code" else "all"
-        val forwardingText = "Forwarding ${shortCodeOnlyText} messages to ${settings.destEmailAddress}"
+        var forwardingText: String
+        if (!settings.forwardingEnabled) {
+            forwardingText = "Forwarding stopped"
+            bar?.setBackgroundDrawable(
+                ColorDrawable(ContextCompat.getColor(this, R.color.tangerine)))
+        } else {
+            val shortCodeOnlyText = if (settings.onlyForwardShortCodes) "short-code" else "all"
+            forwardingText = "Forwarding ${shortCodeOnlyText} messages to ${settings.destEmailAddress}"
+            bar?.setBackgroundDrawable(
+                ColorDrawable(ContextCompat.getColor(this, R.color.olivine)))
+        }
 
         findViewById<TextView>(R.id.forwarding_address).text = forwardingText
     }

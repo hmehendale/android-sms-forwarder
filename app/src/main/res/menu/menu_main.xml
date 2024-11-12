@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_start_forwarding"
+        android:icon="@drawable/forwarding_active_icon"
+        android:title="Start Forwarding"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/action_stop_forwarding"
+        android:icon="@drawable/forwarding_stopped_icon"
+        android:title="Stop Forwarding"
+        app:showAsAction="ifRoom"
+        />
+
     <item
         android:id="@+id/action_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
-        android:title="@string/app_settings" />
+        android:icon="@drawable/settings_icon"
+        android:title="@string/app_settings"
+        app:showAsAction="ifRoom" />
 </menu>

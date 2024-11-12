@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="mintgreen">#FFE5FCF5</color>
+    <color name="azure">#FFECF8F8</color>
+    <color name="mossgreen">#FF40531B</color>
+    <color name="tangerine">#FFFAA275</color>
+    <color name="charcoal">#FF28536B</color>
+    <color name="olivine">#FF8BBD8B</color>
+    <color name="midnightgreen">#FF004346</color>
+    <color name="flame">#FFEE5622</color>
 </resources>
