@@ -1,4 +1,4 @@
-package com.example.messy.Preferences
+package com.github.hmehendale.messy.Preferences
 
 import android.content.Context
 import androidx.preference.PreferenceManager

@@ -1,4 +1,4 @@
-package com.example.messy
+package com.github.hmehendale.messy
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -8,9 +8,9 @@ import android.provider.Telephony
 import android.telephony.SubscriptionManager
 import android.util.Log
 import androidx.core.telephony.SubscriptionManagerCompat
-import com.example.messy.Mailer.SendMail
-import com.example.messy.Preferences.Settings
-import com.example.messy.Preferences.TokenManager
+import com.github.hmehendale.messy.Mailer.SendMail
+import com.github.hmehendale.messy.Preferences.Settings
+import com.github.hmehendale.messy.Preferences.TokenManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

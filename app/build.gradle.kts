@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.messy"
+    namespace = "com.github.hmehendale.messy"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.messy"
+        applicationId = "com.github.hmehendale.messy"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

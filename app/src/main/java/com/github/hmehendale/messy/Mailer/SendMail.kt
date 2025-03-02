@@ -1,4 +1,4 @@
-package com.example.messy.Mailer
+package com.github.hmehendale.messy.Mailer
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers

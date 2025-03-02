@@ -31,7 +31,7 @@
         </receiver>
 
         <activity
-            android:name="com.example.messy.MainActivity"
+            android:name="com.github.hmehendale.messy.MainActivity"
             android:exported="true"
             >
             <intent-filter>
@@ -41,7 +41,7 @@
         </activity>
 
         <activity
-            android:name="com.example.messy.Preferences.SettingsActivity"
+            android:name="com.github.hmehendale.messy.Preferences.SettingsActivity"
             android:exported="true"
             />
     </application>

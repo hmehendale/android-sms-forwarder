@@ -1,4 +1,4 @@
-package com.example.messy.Preferences
+package com.github.hmehendale.messy.Preferences
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,7 +9,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.example.messy.R
+import com.github.hmehendale.messy.R
 import com.google.android.material.textfield.TextInputEditText
 
 const val TOKEN_EXISTS_STRING = "******"

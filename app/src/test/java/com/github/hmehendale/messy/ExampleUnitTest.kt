@@ -1,4 +1,4 @@
-package com.example.messy
+package com.github.hmehendale.messy
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.example.messy
+package com.github.hmehendale.messy
 
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -8,19 +8,16 @@ import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.example.messy.Preferences.Settings
-import com.example.messy.Preferences.SettingsActivity
+import com.github.hmehendale.messy.Preferences.Settings
+import com.github.hmehendale.messy.Preferences.SettingsActivity
 
 const val READ_RECEIVE_SMS_PERMISSION = 0
 
