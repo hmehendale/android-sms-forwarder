@@ -7,5 +7,7 @@
     <string name="source_email_app_password_hint">16-character, generate from account settings</string>
     <string name="destination_email_address_label">Forward messages to</string>
     <string name="destination_email_address_hint">multiple emails separated by commas</string>
+    <string name="source_filter_label">Filter senders</string>
+    <string name="source_filter_layout_hint">Comma separated list of senders that you want to match</string>
     <string name="app_settings">Settings</string>
 </resources>

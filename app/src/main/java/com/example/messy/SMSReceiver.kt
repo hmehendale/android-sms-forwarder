@@ -1,10 +1,13 @@
 package com.example.messy
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
+import android.telephony.SubscriptionManager
 import android.util.Log
+import androidx.core.telephony.SubscriptionManagerCompat
 import com.example.messy.Mailer.SendMail
 import com.example.messy.Preferences.Settings
 import com.example.messy.Preferences.TokenManager
@@ -13,6 +16,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class SMSReceiver: BroadcastReceiver(), CoroutineScope by MainScope() {
+    @SuppressLint("MissingPermission")
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
@@ -22,7 +26,19 @@ class SMSReceiver: BroadcastReceiver(), CoroutineScope by MainScope() {
                 return
             }
             Log.d("SMS_RECEIVER", "Received ${messages.size} messages")
+            val subscriptionId = intent?.getIntExtra("subscription", -1)
+            var recvSIM: String? = null
+            if (subscriptionId != null && subscriptionId != -1) {
+                val slotIndex = SubscriptionManagerCompat.getSlotIndex(subscriptionId)
+                val subsMgr = context?.getSystemService(
+                    Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+                val simDetails = subsMgr.getActiveSubscriptionInfoForSimSlotIndex(slotIndex)
+                recvSIM = "${simDetails.carrierName}"
+                simDetails.carrierName
+            }
+
             val origin = messages[0].originatingAddress.orEmpty()
+
             var body = ""
 
             var i = 0
@@ -30,15 +46,17 @@ class SMSReceiver: BroadcastReceiver(), CoroutineScope by MainScope() {
                 body += messages[i].messageBody
             } while (++i < messages.size)
 
-            Log.d("SMS_RECEIVER", "Final message origin=$origin, body=$body")
+            Log.d("SMS_RECEIVER",
+                "Final message origin=$origin (via ${recvSIM.orEmpty()}, body=$body")
 
             if (context != null && shouldForwardMessage(context, origin)) {
-                    generateAndSendEmail(context, origin, body)
+                    Log.d("SMS_RECEIVER/Send", "Should forward: true, sending" )
+                    generateAndSendEmail(context, origin, recvSIM, body)
             }
         }
     }
 
-    fun generateAndSendEmail(context: Context, origin: String, body: String) {
+    fun generateAndSendEmail(context: Context, origin: String, recvSIM: String?, body: String) {
         val username = Settings(context).sourceEmailAddress
         val dest = Settings(context).destEmailAddress
         val appPassword = TokenManager(context).getToken()
@@ -50,7 +68,10 @@ class SMSReceiver: BroadcastReceiver(), CoroutineScope by MainScope() {
         }
 
         val mailSender = SendMail(username, appPassword)
-        val subject = "Forwarded SMS from $origin"
+        var subject = "Forwarded SMS from $origin"
+        if (recvSIM != null) {
+            subject += " (via ${recvSIM})"
+        }
 
         launch {
             // Send - fire and forget. If there's an error in sending the email,

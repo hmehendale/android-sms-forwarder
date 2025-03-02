@@ -54,6 +54,7 @@ class SettingsActivity: AppCompatActivity() {
         val shortCodesOnly = settings.onlyForwardShortCodes
         val sourceEmail = settings.sourceEmailAddress
         val destEmail = settings.destEmailAddress
+        val sourceFilterCsv = settings.sourceFilters
         val emailToken = if (tokenManager.getToken() != null) TOKEN_EXISTS_STRING else ""
         Log.d("FORWARDER/Settings", "Stored token is " + tokenManager.getToken())
 
@@ -90,6 +91,12 @@ class SettingsActivity: AppCompatActivity() {
             if (text != TOKEN_EXISTS_STRING) {
                 tokenManager.storeToken(text)
             }
+        }
+
+        val srcFilterView = findViewById<TextInputEditText>(R.id.source_filters)
+        srcFilterView.setText(sourceFilterCsv)
+        srcFilterView.debouncedTextChangeListener() { text ->
+            settings.sourceFilters = text
         }
     }
 

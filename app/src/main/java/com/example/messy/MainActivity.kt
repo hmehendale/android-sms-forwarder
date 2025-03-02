@@ -53,6 +53,10 @@ class MainActivity: AppCompatActivity() {
             != PackageManager.PERMISSION_GRANTED) {
             missingPermissions.add(Manifest.permission.RECEIVE_SMS)
         }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+            != PackageManager.PERMISSION_GRANTED) {
+            missingPermissions.add(Manifest.permission.READ_PHONE_STATE)
+        }
         if (missingPermissions.size > 0) {
             ActivityCompat.requestPermissions(this,
                 /* permissions = */ missingPermissions.toArray(arrayOfNulls<String>(0)),
