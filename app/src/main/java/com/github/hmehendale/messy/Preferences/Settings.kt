@@ -11,7 +11,6 @@ class Settings(context: Context) {
         private const val SOURCE_EMAIL_ADDRESS = "source_email_addr"
         private const val DEST_EMAIL_ADDRESS = "dest_email_addr"
         private const val ONLY_FORWARD_SHORTCODE_SMS = "shortcode_sms_only"
-        private const val SOURCE_FILTERS = "source_filters"
     }
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -29,12 +28,6 @@ class Settings(context: Context) {
         set(value: String?) = prefs.edit().putString(DEST_EMAIL_ADDRESS, value).apply()
 
     var forwardingEnabled: Boolean
-        get() = prefs.getBoolean(ENABLE_FORWARDING, true)
+        get() = prefs.getBoolean(ENABLE_FORWARDING, false)
         set(value: Boolean) = prefs.edit().putBoolean(ENABLE_FORWARDING, value).apply()
-
-    var sourceFilters: Set<String>?
-        get() = Collections.unmodifiableSet(
-            // getStringSet returns a MutableSet which must not be mutated :/
-            prefs.getStringSet(SOURCE_FILTERS, setOf<String>()))
-        set(value: Set<String>?) = prefs.edit().putStringSet(SOURCE_FILTERS, value).apply()
 }

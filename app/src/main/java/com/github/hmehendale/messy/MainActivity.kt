@@ -37,10 +37,6 @@ class MainActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Also register receiving broadcasts for SMS Received events
-//        LocalBroadcastManager.getInstance(this)
-//            .registerReceiver(bcastReceiver, IntentFilter(NEW_DATA_BROADCAST_INTENT))
-
         val missingPermissions = ArrayList<String>()
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
             != PackageManager.PERMISSION_GRANTED) {
